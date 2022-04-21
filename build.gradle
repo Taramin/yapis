@@ -1,0 +1,36 @@
+plugins {
+    id 'antlr'
+    id 'application'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+group 'org.dt'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    antlr 'org.antlr:antlr4:4.9.3'
+    implementation 'org.antlr:antlr4-runtime:4.9.3'
+}
+
+generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ["-visitor", "-long-messages"]
+
+    doLast {
+        copy {
+            from "build/generated-src/antlr/main"
+            into "src/main/java"
+        }
+        delete "build/generated-src"
+    }
+}
+
+application{
+    mainClassName('Main')
+}
