@@ -1,0 +1,8 @@
+GLOBAL1 = 1
+GLOBAL2 = 2.2
+GLOBAL3 = 3
+GLOBAL4 = 4.4
+
+def main() {
+    a = GLOBAL1 + GLOBAL2 + GLOBAL3 + GLOBAL4
+}
