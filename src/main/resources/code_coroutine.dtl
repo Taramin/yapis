@@ -1,0 +1,47 @@
+def coroutine f(a, b)
+
+def coroutine f1(a, b) {
+    if (1 == 1) {
+        print(0)
+        yield -1
+        print(1)
+        {
+            yield -1
+            print(2)
+        }
+    }
+    print(2)
+    yield -1
+    print(a)
+    {
+        {
+            {
+                {
+                    print(b)
+                    b = 2.2
+                    yield -1
+                    print(b)
+                }
+            }
+        }
+    }
+    yield -1
+}
+
+def coroutine f2() {
+    yield -2
+}
+
+def main() {
+    a = 1
+    b = 1.1
+    coro1 = create_coroutine(f1(a, b))
+    print(next(coro1))
+    print(next(coro1))
+    print(next(coro1))
+    print(next(coro1))
+    print(next(coro1))
+
+    coro2 = create_coroutine(f2())
+    print(next(coro2))
+}

@@ -2,18 +2,19 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) {
-        var main = new Main();
-
         CharStream inputStream = null;
         try {
-            inputStream = CharStreams.fromString(main.readFileAsString("src/main/resources/code.dtl"));
+            inputStream = CharStreams.fromFileName("src/main/resources/code_coroutine.dtl");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,7 +56,7 @@ public class Main {
             return;
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+        try (var writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write(code);
             writer.flush();
         } catch (IOException e) {
@@ -65,7 +66,7 @@ public class Main {
 
         String outFileName = dirName + "yapis";
         try {
-            String command = "gcc " + fileName + " -o " + outFileName + " -lm";
+            String command = "g++ " + fileName + " -o " + outFileName + " -std=c++20";
             var proc = Runtime.getRuntime().exec(command);
             proc.waitFor();
         } catch (IOException | InterruptedException e) {
@@ -75,20 +76,5 @@ public class Main {
         if (!Files.exists(Path.of(outFileName))) {
             System.out.println("Compilation failed [GCC]");
         }
-    }
-
-    private String readFileAsString(String filePath) throws IOException {
-        var fileData = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(
-                new FileReader(filePath))) {
-            char[] buf = new char[1024];
-            int numRead = 0;
-            while ((numRead = reader.read(buf)) != -1) {
-                String readData = String.valueOf(buf, 0, numRead);
-                fileData.append(readData);
-            }
-            reader.close();
-        }
-        return fileData.toString();
     }
 }
